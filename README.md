@@ -18,7 +18,7 @@ User Roles: Role-based access for Students, Staff, and Admins.
 
 Database: SQLite to store all application data.
 
-##### Optional / Advanced Features ######
+##### Advanced Features included ######
 
 Payment Integration: M-Pesa API integration for paid event registrations.
 
