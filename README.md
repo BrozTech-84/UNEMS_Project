@@ -8,9 +8,9 @@ register for events, and receive push notifications. It enhances communication a
 #######Features
 #####Core Features
 
-Notice Management: Post, view, and categorize notices (General, Academic, Exams, Clubs, Hostels).
+Notice Management: Post, view, and categorize notices 
 
-Event Management: Create, edit, and manage university events with registration functionality.
+Event Management: 
 
 Push Notifications: Users receive real-time notifications for new notices or events.
 
@@ -29,7 +29,7 @@ User Profiles: Detailed user profiles with department, role, and contact info.
 Search & Filtering: Search notices and events by category or date.
 
 ####💻 Technology Stack  ###
-Component	Technology
+Component:	Technology
 Frontend	HTML, CSS, Bootstrap
 Backend	Python, Django
 Database	SQLite
