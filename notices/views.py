@@ -59,8 +59,8 @@ def admin_notice_dashboard(request):
 
 
 @staff_member_required
-def approve_notice(request, notice_id):
-    notice = get_object_or_404(Notice, id=notice_id)
+def approve_notice(request, pk):
+    notice = get_object_or_404(Notice, pk=pk)
     notice.approved = True
     notice.save()
     messages.success(request, "Notice approved successfully!")
@@ -73,3 +73,8 @@ def reject_notice(request, notice_id):
     notice.delete()
     messages.warning(request, "Notice rejected and deleted.")
     return redirect('admin_notice_dashboard')
+
+
+def public_notices(request):
+    notices = Notice.objects.filter(approved=True).order_by('-created_at')
+    return render(request, 'notices/public_notices.html', {'notices': notices})
