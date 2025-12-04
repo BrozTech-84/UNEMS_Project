@@ -12,6 +12,6 @@ urlpatterns = [
     
 
     # Approve & Reject (Admin Only)
-    path('admin/approve/<int:pk>/', views.approve_notice, name='approve_notice'),
-    path('admin/reject/<int:pk>/', views.reject_notice, name='reject_notice'),
+    path('admin/approve/<int:notice_id>/', views.approve_notice, name='approve_notice'),
+    path('admin/reject/<int:notice_id>/', views.reject_notice, name='reject_notice'),
 ]
