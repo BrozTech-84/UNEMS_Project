@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>Notices</h2>
+
+{% for notice in notices %}
+<div class="card mb-3">
+    <div class="card-body">
+        <h4>{{ notice.title }}</h4>
+        <p>{{ notice.content }}</p>
+        <span class="badge bg-info">{{ notice.category }}</span>
+        <p class="mt-2"><small>Posted on {{ notice.created_at }}</small></p>
+
+        {% if notice.attachment %}
+            <a href="{{ notice.attachment.url }}">Download Attachment</a>
+        {% endif %}
+    </div>
+</div>
+{% empty %}
+<p>No notices available.</p>
+{% endfor %}
+
+{% endblock %}
