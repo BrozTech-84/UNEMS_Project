@@ -48,8 +48,17 @@ def create_notice(request):
 
 @login_required
 def notice_list(request):
-    notices = Notice.objects.filter(approved=True).order_by('-created_at')
+    notices = Notice.objects.filter(
+        approved=True,
+        expiry_date__gt=timezone.now()
+        ).order_by('-created_at')
+    
     return render(request, "notices/notice_list.html", {"notices": notices})
+
+def notice_detail(request, pk):
+    notice = get_object_or_404(Notice, pk=pk, approved=True)
+    return render(request, 'notices/notice_detail.html', {'notice': notice})
+
 
 #APPROVE NOTICE VIEW (FOR ADMIN)
 @login_required
@@ -63,11 +72,17 @@ def approve_notice(request, pk):
 @staff_member_required
 def admin_notice_dashboard(request):
     pending_notices = Notice.objects.filter(approved=False)
+    active_notices = Notice.objects.filter(approved=True, expiry_date__gt=timezone.now)
+    expired_notices = Notice.objects.filter(approved=True, expiry_date__lte=timezone.now)
     approved_notices = Notice.objects.filter(approved=True)
+    users =User.objects.count()
 
     return render(request, 'notices/admin_dashboard.html', {
         'pending_notices': pending_notices,
-        'approved_notices': approved_notices
+        'approved_notices': approved_notices,
+        'active_notices': active_notices,
+        'expired_notices': expired_notices,
+        
     })
 
 
@@ -121,5 +136,14 @@ def reject_notice(request, notice_id):
 
 
 def public_notices(request):
-    notices = Notice.objects.filter(approved=True).order_by('-created_at')
+    notices = Notice.objects.filter(
+        approved=True,
+        expiry_date__gt=timezone.now()
+        ).order_by('-created_at')
+    
     return render(request, 'notices/public_notices.html', {'notices': notices})
+
+@login_required
+def download_notice_file(request, pk):
+    notice = get_object_or_404(Notice, pk=pk, approved=True)
+    return redirect(notice.attachment.url)

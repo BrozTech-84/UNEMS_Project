@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 # Create your models here.
 class Notice(models.Model):
@@ -20,5 +21,12 @@ class Notice(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     approved = models.BooleanField(default=False)
 
+    expiry_date = models.DateTimeField(null=True, blank=True)
+
+    def is_expired(self):
+        if self.expiry_date:
+            return timezone.now() > self.expiry_date
+        return False
+    
     def __str__(self):
         return self.title

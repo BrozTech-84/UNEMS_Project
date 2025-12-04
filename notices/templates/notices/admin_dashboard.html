@@ -1,52 +1,69 @@
-{% extends "base.html" %}
-{% block content %}
+{% extends "base.html" %} {% block content %}
 
 <div class="container mt-4">
-    <h2>Admin Notice Approval Dashboard</h2>
-    <hr>
+  <h2>Admin Notice Approval Dashboard</h2>
+  <hr />
 
-    <h4>Pending Notices</h4>
-    <table class="table table-bordered">
-        <tr>
-            <th>Title</th>
-            <th>Category</th>
-            <th>Posted By</th>
-            <th>Actions</th>
-        </tr>
+  <h4>Pending Notices</h4>
+  <table class="table table-bordered">
+    <tr>
+      <th>Title</th>
+      <th>Category</th>
+      <th>Posted By</th>
+      <th>Actions</th>
+    </tr>
 
-        {% for notice in pending_notices %}
-        <tr>
-            <td>{{ notice.title }}</td>
-            <td>{{ notice.category }}</td>
-            <td>{{ notice.posted_by }}</td>
-            <td>
-                <a href="{% url 'approve_notice' notice.id %}" class="btn btn-success btn-sm">Approve</a>
-                <a href="{% url 'reject_notice' notice.id %}" class="btn btn-danger btn-sm">Reject</a>
-            </td>
-        </tr>
-        {% empty %}
-        <tr><td colspan="4">No pending notices</td></tr>
-        {% endfor %}
-    </table>
+    {% for notice in pending_notices %}
+    <tr>
+      <td>{{ notice.title }}</td>
+      <td>{{ notice.category }}</td>
+      <td>{{ notice.posted_by }}</td>
+      <td>
+        <a
+          href="{% url 'approve_notice' notice.id %}"
+          class="btn btn-success btn-sm"
+          >Approve</a
+        >
+        <a
+          href="{% url 'reject_notice' notice.id %}"
+          class="btn btn-danger btn-sm"
+          >Reject</a
+        >
+      </td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td colspan="4">No pending notices</td>
+    </tr>
+    {% endfor %}
+  </table>
 
-    <h4 class="mt-4">Approved Notices</h4>
-    <table class="table table-striped">
-        <tr>
-            <th>Title</th>
-            <th>Category</th>
-            <th>Posted By</th>
-        </tr>
+  {% if notice.approved %}
+  <span class="badge bg-success">Approved</span>
+  {% else %}
+  <span class="badge bg-warning">Pending</span>
+  {% endif %}
 
-        {% for notice in approved_notices %}
-        <tr>
-            <td>{{ notice.title }}</td>
-            <td>{{ notice.category }}</td>
-            <td>{{ notice.posted_by }}</td>
-        </tr>
-        {% empty %}
-        <tr><td colspan="3">No approved notices</td></tr>
-        {% endfor %}
-    </table>
+  <h4 class="mt-4">Approved Notices</h4>
+  <table class="table table-striped">
+    <tr>
+      <th>Title</th>
+      <th>Category</th>
+      <th>Posted By</th>
+    </tr>
+
+    {% for notice in approved_notices %}
+    <tr>
+      <td>{{ notice.title }}</td>
+      <td>{{ notice.category }}</td>
+      <td>{{ notice.posted_by }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td colspan="3">No approved notices</td>
+    </tr>
+    {% endfor %}
+  </table>
 </div>
 
 {% endblock %}

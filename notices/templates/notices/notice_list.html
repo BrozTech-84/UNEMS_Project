@@ -10,9 +10,13 @@
         <p>{{ notice.content }}</p>
         <span class="badge bg-info">{{ notice.category }}</span>
         <p class="mt-2"><small>Posted on {{ notice.created_at }}</small></p>
+        <p><strong>Expires:</strong> {{ notice.expiry_date|date:"Y-m-d H:i" }}</p>
+
 
         {% if notice.attachment %}
             <a href="{{ notice.attachment.url }}">Download Attachment</a>
+            <a href="{% url 'notice_detail' notice.id %}">Read More</a>
+
         {% endif %}
     </div>
 </div>

@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>{{ notice.title }}</h2>
+<p>{{ notice.content }}</p>
+
+{% if notice.attachment %}
+    <a href="{{ notice.attachment.url }}" target="_blank">View Attachment</a>
+{% endif %}
+
+<p><small>Posted on {{ notice.created_at }}</small></p>
+{% endblock %}

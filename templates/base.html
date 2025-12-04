@@ -7,6 +7,10 @@
 <body>
     <nav class="navbar navbar-dark bg-dark px-3">
         <a class="navbar-brand text-white" href="/">UNEMS</a>
+        <a class="nav-link text-white" href="{% url 'notification_list' %}">
+🔔 Notifications
+</a>
+
         <li class="nav-item">
             <a class="nav-link" href="{% url 'public_notices' %}">Notices</a>
         </li>
