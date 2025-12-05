@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from .models import Notice
 from .forms import NoticeForm
+from django.utils import timezone
 from theUsers.models import Profile
 from django.core.mail import send_mass_mail
 

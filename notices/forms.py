@@ -5,7 +5,8 @@ class NoticeForm(forms.ModelForm):
     expiry_date = forms.DateTimeField(
         required=False,
         widget=forms.DateTimeInput(attrs={'type': 'datetime-local'})
-    )
+)
+      
 
     class Meta:
         model = Notice

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>University Events</h2>
+
+{% for event in events %}
+<div class="card mb-3">
+    <div class="card-body">
+        <h4>{{ event.title }}</h4>
+        <p>{{ event.description }}</p>
+        <p><strong>Venue:</strong> {{ event.venue }}</p>
+        <p><strong>Date:</strong> {{ event.date }} {{ event.time }}</p>
+
+        <a href="{% url 'register_event' event.id %}" class="btn btn-primary">
+            Register
+        </a>
+    </div>
+</div>
+{% endfor %}
+
+{% endblock %}

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>UNEMS | University Notice & Event System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="#">UNEMS</a>
+        <div>
+            <a href="{% url 'login' %}" class="btn btn-outline-light me-2">Login</a>
+            <a href="{% url 'register' %}" class="btn btn-light">Register</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container text-center mt-5">
+    <h1 class="fw-bold">University Notice & Event Management System</h1>
+    <p class="lead mt-3">
+        Stay updated with all university notices and upcoming events in one place.
+    </p>
+
+    <div class="mt-4">
+        <a href="{% url 'login' %}" class="btn btn-primary btn-lg me-2">Login</a>
+        <a href="{% url 'register' %}" class="btn btn-outline-primary btn-lg">Create Account</a>
+    </div>
+</div>
+
+</body>
+</html>

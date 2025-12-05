@@ -6,7 +6,12 @@ from django.contrib.auth.models import User
 from .forms import UserRegistrationForm,ProfileForm
 from .models import Profile
 
-# Create your views here.
+# Create your views here:
+
+def landing_page(request):
+    return render(request, 'theUsers/landing.html')
+
+
 def register_view(request):
     if request.method == 'POST':
         user_form = UserRegistrationForm(request.POST)
@@ -17,9 +22,8 @@ def register_view(request):
             user.set_password(user_form.cleaned_data['password1'])
             user.save()
 
-            profile = profile_form.save(commit=False)
-            profile.user = user
-            profile.save()
+            profile, created = Profile.objects.get_or_create(user=user)
+            profile.role = profile_form.cleaned_data.get('role')    
 
             messages.success(request, 'Registration successful. You can now log in.')
             return redirect('login')

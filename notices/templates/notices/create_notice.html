@@ -2,22 +2,52 @@
 {% load static %}
 
 {% block content %}
-<div class="container mt-4">
-    <h2>Create Notice</h2>
+<div class="container mt-5">
+    <div class="card shadow-sm p-4">
+        <h2 class="text-primary mb-4">Create Notice</h2>
 
-    {% if messages %}
-        {% for message in messages %}
-            <div class="alert alert-success">{{ message }}</div>
-        {% endfor %}
-    {% endif %}
+        <!-- Messages -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
 
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
+        <!-- Form -->
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <!-- Form Fields Styled -->
+            {% for field in form %}
+                <div class="mb-3">
+                    <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ field.errors.0 }}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
 
-        <button class="btn btn-primary" type="submit" class="btn btn-primary">
-            Submit Notice
-        </button>
-    </form>
+            <button type="submit" class="btn btn-primary w-100">Submit Notice</button>
+        </form>
+    </div>
 </div>
+
+<!-- Optional CSS -->
+<style>
+    .card {
+        border-radius: 10px;
+    }
+    .btn-primary {
+        transition: background-color 0.2s;
+    }
+    .btn-primary:hover {
+        background-color: #0b5ed7;
+    }
+</style>
 {% endblock %}

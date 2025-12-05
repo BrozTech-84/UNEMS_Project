@@ -1,11 +1,39 @@
 {% extends 'base.html' %}
 {% block content %}
-<h2>{{ notice.title }}</h2>
-<p>{{ notice.content }}</p>
 
-{% if notice.attachment %}
-    <a href="{{ notice.attachment.url }}" target="_blank">View Attachment</a>
-{% endif %}
+<div class="container my-5">
+    <div class="card shadow-sm p-4">
+        <!-- Notice Title -->
+        <h2 class="text-primary mb-3">{{ notice.title }}</h2>
 
-<p><small>Posted on {{ notice.created_at }}</small></p>
+        <!-- Notice Content -->
+        <p class="mb-4">{{ notice.content }}</p>
+
+        <!-- Attachment -->
+        {% if notice.attachment %}
+        <a href="{{ notice.attachment.url }}" target="_blank" class="btn btn-outline-primary mb-3">
+            View Attachment
+        </a>
+        {% endif %}
+
+        <!-- Notice Metadata -->
+        <p class="mb-1"><strong>Category:</strong> {{ notice.category }}</
+        <p class="text-muted mb-0"><small>Posted on {{ notice.created_at|date:"Y-m-d H:i" }}</small></p>
+    </div>
+</div>
+
+<style>
+    .card {
+        border-radius: 10px;
+    }
+    .btn-outline-primary {
+        transition: background-color 0.2s, color 0.2s;
+    }
+    .btn-outline-primary:hover {
+        background-color: #0d6efd;
+        color: white;
+        border-color: #0d6efd;
+    }
+</style>
+
 {% endblock %}

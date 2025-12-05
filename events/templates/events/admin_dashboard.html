@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>Admin Event Dashboard</h2>
+
+<table class="table table-bordered">
+<tr>
+    <th>Title</th>
+    <th>Date</th>
+    <th>Venue</th>
+</tr>
+
+{% for event in events %}
+<tr>
+    <td>{{ event.title }}</td>
+    <td>{{ event.date }}</td>
+    <td>{{ event.venue }}</td>
+</tr>
+{% endfor %}
+</table>
+
+{% endblock %}
