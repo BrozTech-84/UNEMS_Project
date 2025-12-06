@@ -34,6 +34,7 @@ class EventRegistration(models.Model):
     def __str__(self):
         return f"{self.student} -> {self.event.title}"
     
+    
 class EventAttendance(models.Model):
     student = models.ForeignKey(User, on_delete=models.CASCADE)
     event = models.ForeignKey(Event, on_delete=models.CASCADE)

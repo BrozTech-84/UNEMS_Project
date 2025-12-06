@@ -10,6 +10,8 @@
 
     <li class="nav-item">
         <a class="nav-link text-white" href="{% url 'public_notices' %}">Notices</a>
+        <a class="nav-link text-white" href="{% url 'event_list' %}">Events</a>
+
     </li>
 
     {% if user.is_authenticated %}
