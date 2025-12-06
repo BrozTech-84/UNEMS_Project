@@ -22,7 +22,7 @@ def event_list(request):
 def register_event(request, event_id):
     event = get_object_or_404(Event, id=event_id)
 
-    obj, created = EventRegistration.objects.get_or_create(
+    registration, created = EventRegistration.objects.get_or_create(
         student=request.user,
         event=event
     )

@@ -15,7 +15,7 @@
         </div>
         <div>
           {% if not n.is_read %}
-            <button class="btn btn-sm btn-primary" onclick="markRead({{ n.id }})">Mark read</button>
+            <button class="btn btn-sm btn-primary" onclick="markRead({ id })">Mark read</button>
           {% endif %}
         </div>
       </li>
