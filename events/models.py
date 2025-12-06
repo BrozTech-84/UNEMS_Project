@@ -8,7 +8,7 @@ class Event(models.Model):
     description = models.TextField()
     venue = models.CharField(max_length=255)
     date = models.DateTimeField()
-    time = models.TimeField()
+    time = models.TimeField(default="09:00")
     organizer = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='organized_events')
     poster = models.ImageField(upload_to='events/', blank=True, null=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='event_creator')

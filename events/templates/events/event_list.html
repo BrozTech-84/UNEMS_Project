@@ -1,21 +1,24 @@
-{% extends "base.html" %}
-{% block content %}
+{% extends 'base.html' %}
 
+{% block content %}
 <h2>University Events</h2>
 
 {% for event in events %}
-<div class="card mb-3">
-    <div class="card-body">
-        <h4>{{ event.title }}</h4>
-        <p>{{ event.description }}</p>
-        <p><strong>Venue:</strong> {{ event.venue }}</p>
-        <p><strong>Date:</strong> {{ event.date }} {{ event.time }}</p>
+<div class="card mb-3 p-3">
+    <h4>{{ event.title }}</h4>
+    <p><b>Venue:</b> {{ event.venue }}</p>
+    <p><b>Date:</b> {{ event.date }} | <b>Time:</b> {{ event.time }}</p>
+    <p>{{ event.description }}</p>
 
-        <a href="{% url 'register_event' event.id %}" class="btn btn-primary">
+    {% if user.is_authenticated %}
+        <a href="{% url 'register_event' event.id %}" class="btn btn-success">
             Register
         </a>
-    </div>
+    {% else %}
+        <p class="text-danger">Login to register</p>
+    {% endif %}
 </div>
+{% empty %}
+<p>No events available.</p>
 {% endfor %}
-
 {% endblock %}

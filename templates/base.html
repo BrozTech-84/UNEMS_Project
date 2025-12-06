@@ -6,40 +6,19 @@
 </head>
 <body>
     <nav class="navbar navbar-dark bg-dark px-3">
-        <a class="navbar-brand text-white" href="/">UNEMS</a>
-        <a class="nav-link text-white" href="{% url 'notification_list' %}">
-🔔 Notifications
-</a>
+    <a class="navbar-brand text-white" href="/">UNEMS</a>
 
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'public_notices' %}">Notices</a>
-        </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" href="{% url 'public_notices' %}">Notices</a>
+    </li>
 
+    {% if user.is_authenticated %}
         <a class="text-white" href="/logout/">Logout</a>
+    {% else %}
+        <a class="text-white" href="/theUsers/login/">Login</a>
+    {% endif %}
+</nav>
 
-        <ul class="navbar-nav ms-auto">
-  <li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle text-white" href="#" id="notifDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-      Notifications <span class="badge bg-danger" id="notif-count">{{ unread_count }}</span>
-    </a>
-    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notifDropdown" style="width: 360px;">
-      <li class="dropdown-header">Notifications</li>
-      {% for n in request.user.notifications.all|slice:":5" %}
-        <li class="dropdown-item {% if not n.is_read %}fw-bold{% endif %}">
-          <a href="{{ n.url }}" class="text-decoration-none" onclick="markRead({{ n.id }})">
-            <div>{{ n.title }}</div>
-            <small class="text-muted">{{ n.created_at|timesince }} ago</small>
-          </a>
-        </li>
-      {% empty %}
-        <li class="dropdown-item">No notifications</li>
-      {% endfor %}
-      <li><hr class="dropdown-divider"></li>
-      <li><a class="dropdown-item text-center" href="{% url 'notifications_list' %}">View all</a></li>
-    </ul>
-  </li>
-</ul>
-    </nav>
 
     <div class="container mt-4">
         {% block content %}{% endblock %}

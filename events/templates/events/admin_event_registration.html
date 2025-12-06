@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h3>Event Registrations</h3>
+
+<table class="table table-bordered">
+<tr>
+  <th>Student</th>
+  <th>Event</th>
+  <th>Date</th>
+  <th>Attendance</th>
+</tr>
+
+{% for reg in registrations %}
+<tr>
+  <td>{{ reg.student.username }}</td>
+  <td>{{ reg.event.title }}</td>
+  <td>{{ reg.event.date }}</td>
+  <td>
+    {% if not reg.attended %}
+      <a href="{% url 'mark_attendance' reg.id %}" class="btn btn-success btn-sm">
+        Mark Present
+      </a>
+    {% else %}
+      ✅ Present
+    {% endif %}
+  </td>
+</tr>
+{% endfor %}
+</table>
+
+{% endblock %}

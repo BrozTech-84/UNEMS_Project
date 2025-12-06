@@ -51,7 +51,7 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     messages.info(request, 'You have been logged out.')
-    return redirect('login')
+    return redirect('landing.html')
 
 @login_required
 def dashboard_view(request):

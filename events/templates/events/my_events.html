@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>My Registered Events</h2>
+
+{% for r in registrations %}
+<div class="card mb-2 p-3">
+    <h5>{{ r.event.title }}</h5>
+    <p>Date: {{ r.event.date }}</p>
+    <p>Status: 
+        {% if r.is_attended %}
+            <span class="text-success">Attended</span>
+        {% else %}
+            <span class="text-warning">Not Attended</span>
+        {% endif %}
+    </p>
+</div>
+{% empty %}
+<p>You have not registered for any events.</p>
+{% endfor %}
+{% endblock %}

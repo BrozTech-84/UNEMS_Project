@@ -45,6 +45,12 @@ def register_event(request, event_id):
 
     return redirect('event_list')
 
+# My Registered Events (student dashboard)
+@login_required
+def my_events(request):
+    registrations = EventRegistration.objects.filter(student=request.user)
+    return render(request, 'events/my_events.html', {'registrations': registrations})
+
 
 # ADMIN DASHBOARD
 @staff_member_required
@@ -65,3 +71,10 @@ def mark_attendance(request, event_id, student_id):
 
     messages.success(request, "Attendance marked!")
     return redirect('admin_event_dashboard')
+
+@staff_member_required
+def admin_event_registrations(request):
+    registrations = EventRegistration.objects.select_related('event', 'student')
+    return render(request, 'events/admin_event_registrations.html', {
+        'registrations': registrations
+    })

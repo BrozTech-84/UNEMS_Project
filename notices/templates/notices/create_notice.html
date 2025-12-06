@@ -3,8 +3,8 @@
 
 {% block content %}
 <div class="container mt-5">
-    <div class="card shadow-sm p-4">
-        <h2 class="text-primary mb-4">Create Notice</h2>
+    <div class="card shadow-sm p-5 border-0 rounded-4">
+        <h2 class="text-primary mb-4 text-center">Create Notice</h2>
 
         <!-- Messages -->
         {% if messages %}
@@ -19,35 +19,88 @@
         <!-- Form -->
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
-            
-            <!-- Form Fields Styled -->
+
+            <!-- Floating Label Inputs -->
             {% for field in form %}
-                <div class="mb-3">
-                    <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
-                    {{ field }}
-                    {% if field.errors %}
-                        <div class="invalid-feedback d-block">
-                            {{ field.errors.0 }}
-                        </div>
-                    {% endif %}
-                </div>
+                {% if field.name != "attachment" %}
+                    <div class="form-floating mb-3">
+                        {{ field|add_class:"form-control"|attr:"placeholder:"+field.label }}
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {% if field.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ field.errors.0 }}
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endif %}
             {% endfor %}
 
-            <button type="submit" class="btn btn-primary w-100">Submit Notice</button>
+            <!-- File Upload with Preview -->
+            {% if form.attachment %}
+            <div class="mb-4">
+                <label for="{{ form.attachment.id_for_label }}" class="form-label fw-semibold">Upload Attachment</label>
+                {{ form.attachment|add_class:"form-control" }}
+                <div id="filePreview" class="mt-2"></div>
+                {% if form.attachment.errors %}
+                    <div class="invalid-feedback d-block">
+                        {{ form.attachment.errors.0 }}
+                    </div>
+                {% endif %}
+            </div>
+            {% endif %}
+
+            <button type="submit" class="btn btn-primary w-100 py-2 fw-bold">Submit Notice</button>
         </form>
     </div>
 </div>
 
-<!-- Optional CSS -->
+<!-- File Preview Script -->
+<script>
+    const attachmentInput = document.querySelector('input[type="file"]');
+    const preview = document.getElementById('filePreview');
+
+    if (attachmentInput) {
+        attachmentInput.addEventListener('change', function() {
+            preview.innerHTML = '';
+            const file = this.files[0];
+            if (file) {
+                const fileType = file.type;
+                if (fileType.startsWith('image/')) {
+                    const img = document.createElement('img');
+                    img.src = URL.createObjectURL(file);
+                    img.style.maxWidth = '200px';
+                    img.classList.add('img-thumbnail', 'mt-2');
+                    preview.appendChild(img);
+                } else {
+                    const p = document.createElement('p');
+                    p.textContent = `Selected file: ${file.name}`;
+                    preview.appendChild(p);
+                }
+            }
+        });
+    }
+</script>
+
+<!-- Custom Styling -->
 <style>
     .card {
-        border-radius: 10px;
+        border-radius: 15px;
+        background-color: #ffffff;
     }
     .btn-primary {
-        transition: background-color 0.2s;
+        transition: all 0.3s ease;
+        font-size: 1rem;
     }
     .btn-primary:hover {
-        background-color: #0b5ed7;
+        background-color: #0a58ca;
+    }
+    .form-floating > .form-control {
+        border-radius: 8px;
+    }
+    label {
+        font-weight: 500;
     }
 </style>
 {% endblock %}
+{% extends 'base.html' %}
+{% block content %}

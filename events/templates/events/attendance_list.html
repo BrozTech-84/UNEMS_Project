@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Event Attendance (Admin)</h2>
+
+<table class="table table-bordered">
+    <tr>
+        <th>Student</th>
+        <th>Event</th>
+        <th>Status</th>
+        <th>Action</th>
+    </tr>
+
+    {% for r in registrations %}
+    <tr>
+        <td>{{ r.student.username }}</td>
+        <td>{{ r.event.title }}</td>
+        <td>
+            {% if r.is_attended %}
+                ✅ Attended
+            {% else %}
+                ❌ Not Attended
+            {% endif %}
+        </td>
+        <td>
+            {% if not r.is_attended %}
+            <a href="{% url 'mark_attendance' r.id %}" class="btn btn-sm btn-primary">
+                Mark Present
+            </a>
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
