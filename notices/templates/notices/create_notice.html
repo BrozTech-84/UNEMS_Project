@@ -17,40 +17,33 @@
         {% endif %}
 
         <!-- Form -->
-        <form method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
+       <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
 
-            <!-- Floating Label Inputs -->
-            {% for field in form %}
-                {% if field.name != "attachment" %}
-                    <div class="form-floating mb-3">
-                        {{ field|add_class:"form-control"|attr:"placeholder:"+field.label }}
-                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                        {% if field.errors %}
-                            <div class="invalid-feedback d-block">
-                                {{ field.errors.0 }}
-                            </div>
-                        {% endif %}
-                    </div>
-                {% endif %}
-            {% endfor %}
+    <div class="mb-3">
+      {{ form.title.label_tag }}
+      {{ form.title }}
+    </div>
 
-            <!-- File Upload with Preview -->
-            {% if form.attachment %}
-            <div class="mb-4">
-                <label for="{{ form.attachment.id_for_label }}" class="form-label fw-semibold">Upload Attachment</label>
-                {{ form.attachment|add_class:"form-control" }}
-                <div id="filePreview" class="mt-2"></div>
-                {% if form.attachment.errors %}
-                    <div class="invalid-feedback d-block">
-                        {{ form.attachment.errors.0 }}
-                    </div>
-                {% endif %}
-            </div>
-            {% endif %}
+    <div class="mb-3">
+      {{ form.content.label_tag }}
+      {{ form.content }}
+    </div>
 
-            <button type="submit" class="btn btn-primary w-100 py-2 fw-bold">Submit Notice</button>
-        </form>
+    <div class="mb-3">
+      {{ form.audience.label_tag }}
+      {{ form.audience }}
+    </div>
+
+    <div class="mb-3">
+      {{ form.expiry_date.label_tag }}
+      {{ form.expiry_date }}
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100">
+      Submit for Approval
+    </button>
+  </form>
     </div>
 </div>
 
