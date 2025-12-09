@@ -11,10 +11,8 @@ class Event(models.Model):
     time = models.TimeField(default="09:00")
     organizer = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='organized_events')
     poster = models.ImageField(upload_to='events/', blank=True, null=True)
-    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='event_creator')
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    requires_payment = models.BooleanField(default=False)
+    
+    is_paid = models.BooleanField(default=False)
     price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
 
     def __str__(self):
@@ -34,7 +32,49 @@ class EventRegistration(models.Model):
     def __str__(self):
         return f"{self.student} -> {self.event.title}"
     
-    
+    # Payment Details
+class EventPayment(models.Model):
+    PENDING = 'PENDING'
+    SUCCESS = 'SUCCESS'
+    FAILED = 'FAILED'
+    STATUS_CHOICES = [
+        (PENDING, 'Pending'),
+        (SUCCESS, 'Success'),
+        (FAILED, 'Failed'),
+    ]
+
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='payments')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    phone_number = models.CharField(max_length=20)
+    mpesa_checkout_request_id = models.CharField(max_length=255, blank=True, null=True)
+    mpesa_transaction_id = models.CharField(max_length=255, blank=True, null=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default=PENDING)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['mpesa_checkout_request_id']),
+            models.Index(fields=['mpesa_transaction_id']),
+        ]
+        constraints = [
+            models.UniqueConstraint(
+            fields=['mpesa_checkout_request_id'],
+            name='unique_mpesa_checkout_request'
+            )
+        ]
+
+
+    def __str__(self):
+        return f"{self.user.username} - {self.event.title} - {self.status}"
+
+def mark_paid(self):
+    self.has_paid = True
+    self.save()
+
+
 class EventAttendance(models.Model):
     student = models.ForeignKey(User, on_delete=models.CASCADE)
     event = models.ForeignKey(Event, on_delete=models.CASCADE)

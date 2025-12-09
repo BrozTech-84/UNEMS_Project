@@ -1,0 +1,49 @@
+body {
+    background-color: #f3f6fb;
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+.navbar {
+    background: #002147;
+}
+
+.navbar-brand {
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.card {
+    border-radius: 10px;
+    border: none;
+}
+
+.page-title {
+    font-weight: 700;
+    color: #002147;
+}
+
+.table th {
+    background-color: #002147 !important;
+    color: #fff;
+}
+
+.badge-paid {
+    background: #f7b500;
+}
+
+.badge-free {
+    background: #1b7f5a;
+}
+
+.btn-primary {
+    background: #002147;
+    border: none;
+}
+
+.btn-primary:hover {
+    background: #001635;
+}
+
+.dashboard-card {
+    border-left: 6px solid #002147;
+}

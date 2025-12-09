@@ -4,7 +4,6 @@ from . import views
 urlpatterns = [
     path('', views.event_list, name='event_list'),
     path('register/<int:event_id>/', views.register_event, name='register_event'),
-    
 
 
     # Admin
@@ -17,7 +16,10 @@ urlpatterns = [
     
     # Student
     path('my-events/', views.my_events, name='my_events'),
-    
+    path('index/', views.index, name='index'),
+    path('pay/<int:event_id>/', views.initiate_payment, name='initiate_payment'),
+    path('mpesa/callback/', views.mpesa_callback, name='mpesa_callback'),
+
     # Attendance
     path('admin/attendance/<int:pk>/<int:student_id>/', views.mark_attendance, name='mark_attendance'),
 ]

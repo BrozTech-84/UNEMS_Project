@@ -18,7 +18,10 @@ def public_notices(request):
 #LOGGED-IN NOTICE LIST
 @login_required
 def notice_list(request):
-    notices = Notice.objects.filter(approved=True).order_by('-created_at')
+    today = timezone.localdate()
+    notices = Notice.objects.filter(
+        approved=True,
+        is_active=True).filter(models.Q(expiry_date__isnull=True) | models.Q(expiry_date__gte=today).order_by('-created_at'))
     return render(request, 'notices/notice_list.html', {'notices': notices})
 
 #CREATE NOTICE VIEW(FOR STAFF AND ADMIN)

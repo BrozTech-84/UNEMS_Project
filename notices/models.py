@@ -21,11 +21,12 @@ class Notice(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     approved = models.BooleanField(default=False)
 
-    expiry_date = models.DateTimeField(null=True, blank=True)
-
+    expiry_date = models.DateTimeField(null=True, blank=True, help_text="If set, the notice will be considered expired after this date")
+    is_active = models.BooleanField(default=True, help_text="if false the notice is hidden from public view")
+    
     def is_expired(self):
         if self.expiry_date:
-            return timezone.now() > self.expiry_date
+            return timezone.localdate() > self.expiry_date
         return False
     
     def __str__(self):
