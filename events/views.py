@@ -162,7 +162,8 @@ def initiate_payment(request, event_id):
         transaction_desc = f"Payment for {event.title}"
 
         # ✅ CALLBACK URL 
-        callback_url = "https://bette-gnarly-cain.ngrok-free.dev/events/mpesa/callback/"
+        callback_url = "https://api.darajambili.com/express-payment"# https://bette-gnarly-cain.ngrok-free.dev/events/mpesa/callback/"
+ 
 
         try:
             response = cl.stk_push(

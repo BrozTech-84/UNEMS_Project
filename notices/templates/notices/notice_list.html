@@ -1,49 +1,58 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h2 class="mb-4 text-primary">Notices</h2>
+<div class="container my-5">
+    <h2 class="mb-4 text-primary text-center">Notices</h2>
 
-<div class="row">
-    {% for notice in notices %}
-    <div class="col-12 col-md-6 col-lg-4 mb-4">
-        <div class="card h-100 notice-card">
-            <div class="card-body d-flex flex-column">
-                <h4 class="card-title">{{ notice.title }}</h4>
-                <p class="card-text">{{ notice.content|truncatewords:30 }}</p>
+    <div class="row g-4">
+        {% for notice in notices %}
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card h-100 notice-card shadow-sm">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">{{ notice.title }}</h5>
+                    <p class="card-text">{{ notice.content|truncatewords:30 }}</p>
 
-                <div class="mb-2">
-                    <span class="badge bg-info text-dark">{{ notice.category }}</span>
-                    <small class="text-muted ms-2">Posted on {{ notice.created_at|date:"Y-m-d H:i" }}</small>
+                    <div class="mb-2">
+                        <span class="badge bg-info text-dark">{{ notice.category }}</span>
+                        <small class="text-muted ms-2">Posted on {{ notice.created_at|date:"Y-m-d H:i" }}</small>
+                    </div>
+
+                    <p class="mb-3"><strong>Expires:</strong> {{ notice.expiry_date|date:"Y-m-d H:i" }}</p>
+
+                    <div class="mt-auto">
+                        {% if notice.attachment %}
+                        <a href="{{ notice.attachment.url }}" class="btn btn-sm btn-outline-primary me-2 mb-2">
+                            Download Attachment
+                        </a>
+                        {% endif %}
+                        <a href="{% url 'notice_detail' notice.id %}" class="btn btn-sm btn-primary mb-2">
+                            Read More
+                        </a>
+                    </div>
                 </div>
-
-                <p><strong>Expires:</strong> {{ notice.expiry_date|date:"Y-m-d H:i" }}</p>
-
-                {% if notice.attachment %}
-                <div class="mt-auto">
-                    <a href="{{ notice.attachment.url }}" class="btn btn-sm btn-outline-primary me-2 mb-2">
-                        Download Attachment
-                    </a>
-                    <a href="{% url 'notice_detail' notice.id %}" class="btn btn-sm btn-primary mb-2">
-                        Read More
-                    </a>
-                </div>
-                {% endif %}
             </div>
         </div>
+        {% empty %}
+        <p class="text-center text-muted mt-5">No notices available.</p>
+        {% endfor %}
     </div>
-    {% empty %}
-    <p class="text-center text-muted">No notices available.</p>
-    {% endfor %}
 </div>
 
 <!-- Custom CSS for hover effect -->
 <style>
 .notice-card {
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 12px;
 }
 .notice-card:hover {
-    transform: translateY(-5px); /* Slight lift */
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2); /* Deeper shadow */
+    transform: translateY(-7px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+}
+.card-title {
+    font-weight: 600;
+}
+.card-text {
+    flex-grow: 1; /* Ensures content pushes buttons down */
 }
 </style>
 
