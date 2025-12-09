@@ -3,8 +3,8 @@
 
 {% block content %}
 <div class="container mt-5">
-    <div class="card shadow-sm p-5 border-0 rounded-4">
-        <h2 class="text-primary mb-4 text-center">Create Notice</h2>
+    <div class="card shadow-lg border-0 rounded-4 p-4 p-md-5">
+        <h2 class="text-primary text-center mb-4">Create Notice</h2>
 
         <!-- Messages -->
         {% if messages %}
@@ -17,33 +17,42 @@
         {% endif %}
 
         <!-- Form -->
-       <form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
 
-    <div class="mb-3">
-      {{ form.title.label_tag }}
-      {{ form.title }}
-    </div>
+            <!-- Title -->
+            <div class="mb-3">
+                {{ form.title.label_tag(attrs={"class": "form-label"}) }}
+                {{ form.title|add_class:"form-control" }}
+            </div>
 
-    <div class="mb-3">
-      {{ form.content.label_tag }}
-      {{ form.content }}
-    </div>
+            <!-- Content -->
+            <div class="mb-3">
+                {{ form.content.label_tag(attrs={"class": "form-label"}) }}
+                {{ form.content|add_class:"form-control" }}
+            </div>
 
-    <div class="mb-3">
-      {{ form.audience.label_tag }}
-      {{ form.audience }}
-    </div>
+            <!-- Audience -->
+            <div class="mb-3">
+                {{ form.audience.label_tag(attrs={"class": "form-label"}) }}
+                {{ form.audience|add_class:"form-select" }}
+            </div>
 
-    <div class="mb-3">
-      {{ form.expiry_date.label_tag }}
-      {{ form.expiry_date }}
-    </div>
+            <!-- Expiry Date -->
+            <div class="mb-3">
+                {{ form.expiry_date.label_tag(attrs={"class": "form-label"}) }}
+                {{ form.expiry_date|add_class:"form-control" }}
+            </div>
 
-    <button type="submit" class="btn btn-primary w-100">
-      Submit for Approval
-    </button>
-  </form>
+            <!-- File Upload -->
+            <div class="mb-4">
+                {{ form.attachment.label_tag(attrs={"class": "form-label"}) }}
+                {{ form.attachment|add_class:"form-control" }}
+                <div id="filePreview" class="mt-2"></div>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 py-2">Submit for Approval</button>
+        </form>
     </div>
 </div>
 
@@ -61,8 +70,8 @@
                 if (fileType.startsWith('image/')) {
                     const img = document.createElement('img');
                     img.src = URL.createObjectURL(file);
-                    img.style.maxWidth = '200px';
                     img.classList.add('img-thumbnail', 'mt-2');
+                    img.style.maxWidth = '200px';
                     preview.appendChild(img);
                 } else {
                     const p = document.createElement('p');
@@ -73,27 +82,4 @@
         });
     }
 </script>
-
-<!-- Custom Styling -->
-<style>
-    .card {
-        border-radius: 15px;
-        background-color: #ffffff;
-    }
-    .btn-primary {
-        transition: all 0.3s ease;
-        font-size: 1rem;
-    }
-    .btn-primary:hover {
-        background-color: #0a58ca;
-    }
-    .form-floating > .form-control {
-        border-radius: 8px;
-    }
-    label {
-        font-weight: 500;
-    }
-</style>
 {% endblock %}
-{% extends 'base.html' %}
-{% block content %}

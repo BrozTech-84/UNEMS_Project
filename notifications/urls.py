@@ -3,6 +3,5 @@ from . import views
 
 urlpatterns = [
     path('', views.notification_list, name='notification_list'),
-    path('mark-read/', views.mark_as_read, name='notification_mark_as_read'),
-
+    path('admin/', views.admin_notification_dashboard, name='admin_notification_dashboard'),
 ]

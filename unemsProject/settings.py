@@ -191,8 +191,8 @@ MEDIA_ROOT = BASE_DIR / 'media'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_URL = '/theUsers/login/'
-LOGIN_REDIRECT_URL = '/theUsers/dashboard/'
-LOGOUT_REDIRECT_URL = '/theUsers/login/'
+LOGIN_REDIRECT_URL = 'dashboard'
+LOGOUT_REDIRECT_URL = 'login'
 
 #MPESA_CALLBACK_URL = "https://#your-ngrok-url.ngrok-free.app/events/#mpesa/callback/"
 
