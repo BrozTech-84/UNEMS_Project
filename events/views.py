@@ -9,6 +9,7 @@ from .models import EventPayment
 from django.urls import reverse
 import json
 from django.views.decorators.csrf import csrf_exempt
+from notifications.utils import notify_all_users
 from django.http import HttpResponse
 from django_daraja.mpesa.core import MpesaClient
 from django.http import JsonResponse
@@ -62,7 +63,14 @@ def create_event(request):
             event = form.save(commit=False)
             event.organizer = request.user
             event.save()
-            messages.success(request, 'Event created successfully.')
+
+             # ✅ Send notification
+            notify_all_users(
+                subject="New Event Posted",
+                message=f"A new event has been created: {event.title}"
+            )
+
+            messages.success(request, 'Event and notifications created successfully .')
             return redirect('admin_event_dashboard')
     else:
         form = EventForm()
@@ -107,15 +115,15 @@ def admin_event_registrations(request):
 #  EDIT EVENT (ADMIN)
 @login_required
 @user_passes_test(is_admin)
-def edit_event(request, pk):
-    event = get_object_or_404(Event, pk=pk)
+def edit_event(request, event_id):
+    event = get_object_or_404(Event, id=event_id)
 
     if request.method == 'POST':
         form = EventForm(request.POST, instance=event)
         if form.is_valid():
             form.save()
             messages.success(request, "Event updated successfully.")
-            return redirect('events_list')
+            return redirect('event_list')
     else:
         form = EventForm(instance=event)
 
@@ -130,7 +138,7 @@ def delete_event(request, event_id):
     event = get_object_or_404(Event, id=event_id)
     event.delete()
     messages.success(request, "Event deleted successfully.")
-    return redirect('admin_dashboard')
+    return redirect('admin_event_dashboard')
 
 # INITIATING PAYMENT VIA MPESAclient
 

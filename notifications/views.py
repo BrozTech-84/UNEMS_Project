@@ -5,9 +5,14 @@ from .models import Notification
 from django.http import JsonResponse
 
 @login_required
-def notification_list(request):
-    notes = Notification.objects.filter(user=request.user).order_by('-created_at')
-    return render(request, 'notifications/list.html', {'notifications': notes})
+def user_notifications(request):
+    notifications = Notification.objects.filter(
+        user=request.user
+    ).order_by('-created_at')
+
+    return render(request, 'notifications/user_notifications.html', {
+        'notifications': notifications
+    })
 
 @login_required
 def mark_as_read(request):
@@ -22,6 +27,19 @@ def mark_as_read(request):
         except Notification.DoesNotExist:
             return JsonResponse({'status': 'error'}, status=404)
     return JsonResponse({'status': 'invalid'}, status=400)
+
+
+@login_required
+def mark_notification_read(request, pk):
+    notification = get_object_or_404(Notification, pk=pk, user=request.user)
+    notification.is_read = True
+    notification.save()
+    return redirect('user_notifications')
+
+@login_required
+def mark_all_notifications_read(request):
+    Notification.objects.filter(user=request.user, is_read=False).update(is_read=True)
+    return redirect('user_notifications')
 
 
 @staff_member_required

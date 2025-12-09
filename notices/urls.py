@@ -3,8 +3,6 @@ from . import views
 
 urlpatterns = [
     path('', views.notice_list, name='notice_list'),
-    path('public/', views.public_notices, name='public_notices'),
-
     path('create/', views.create_notice, name='create_notice'),
     path('<int:pk>/', views.notice_detail, name='notice_detail'),
     path('download/<int:pk>/', views.download_notice_file, name='download_notice'),

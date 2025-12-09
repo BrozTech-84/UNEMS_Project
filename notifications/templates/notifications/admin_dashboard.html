@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h3 class="fw-bold">Notifications</h3>
+
+    <div class="card shadow-sm mt-3">
+        <div class="card-body">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Message</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for n in notifications %}
+                    <tr>
+                        <td>{{ n.user.username }}</td>
+                        <td>{{ n.message }}</td>
+                        <td>{{ n.created_at|date:"M d, Y H:i" }}</td>
+                        <td>
+                            {% if n.is_read %}
+                                <span class="badge bg-success">Read</span>
+                            {% else %}
+                                <span class="badge bg-warning">Unread</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

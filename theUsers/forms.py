@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from .models import Profile
+from django.core.exceptions import ValidationError
 
 class UserRegistrationForm(forms.ModelForm):
     password1 = forms.CharField(label='password', widget=forms.PasswordInput(attrs={'class':'form-control', 'placeholder':'Enter Password'}))
@@ -8,7 +9,7 @@ class UserRegistrationForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password']
+        fields = ['username', 'email',]
         widgets = {
             'username': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Enter Username'}),
             'email': forms.EmailInput(attrs={'class':'form-control', 'placeholder':'Enter Email'}),
@@ -24,12 +25,30 @@ class UserRegistrationForm(forms.ModelForm):
 
         return cleaned_data
     
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        domain = email.split('@')[-1]
+
+        STUDENT_DOMAIN = 'student.university.ke'
+        STAFF_ADMIN_DOMAIN = 'staf.university.ke'   
+        
+        role = None
+
+        if domain == STUDENT_DOMAIN:
+            role = 'student'
+        elif domain == STAFF_ADMIN_DOMAIN:
+            role = 'staff' 
+        else:
+            raise ValidationError("Please use a valid university email address.")
+
+        self.cleaned_data['role'] = role
+        return email
+    
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['role', 'department', 'phone']
+        fields = ['department', 'phone']
         widgets = {
-            'role': forms.Select(attrs={'class':'form-control'}),
             'department': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Enter Department'}),
             'phone': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Enter Phone Number'}),
         }

@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow-lg border-0 rounded-4 p-4 p-md-5">
+
+        <h2 class="text-primary text-center mb-4">Edit Event</h2>
+
+        <!-- Messages -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <!-- Form -->
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <!-- Title -->
+            <div class="mb-3">
+                {{ form.title.label_tag }}
+                {{ form.title|add_class:"form-control" }}
+            </div>
+
+            <!-- Venue -->
+            <div class="mb-3">
+                {{ form.venue.label_tag }}
+                {{ form.venue|add_class:"form-control" }}
+            </div>
+
+            <!-- Date -->
+            <div class="mb-3">
+                {{ form.date.label_tag }}
+                {{ form.date|add_class:"form-control" }}
+            </div>
+
+            <!-- Time -->
+            <div class="mb-3">
+                {{ form.time.label_tag }}
+                {{ form.time|add_class:"form-control" }}
+            </div>
+
+            <!-- Description -->
+            <div class="mb-3">
+                {{ form.description.label_tag }}
+                {{ form.description|add_class:"form-control" }}
+            </div>
+
+            <!-- Is Paid -->
+            <div class="form-check mb-3">
+                {{ form.is_paid|add_class:"form-check-input" }}
+                {{ form.is_paid.label_tag }}
+            </div>
+
+            <!-- Price -->
+            <div class="mb-3" id="priceField" style="display: none;">
+                {{ form.price.label_tag }}
+                {{ form.price|add_class:"form-control" }}
+            </div>
+
+            <!-- Poster Upload -->
+            <div class="mb-4">
+                {{ form.poster.label_tag }}
+                {{ form.poster|add_class:"form-control" }}
+
+                <!-- Preview -->
+                <div id="filePreview" class="mt-2">
+                    {% if event.poster %}
+                        <p class="text-muted">Current poster: 
+                            <a href="{{ event.poster.url }}" target="_blank">{{ event.poster.name }}</a>
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 py-2">Save Changes</button>
+        </form>
+
+        <div class="text-center mt-3">
+            <a href="{% url 'admin_event_dashboard' %}" class="btn btn-outline-secondary btn-sm">
+                Back to Dashboard
+            </a>
+        </div>
+
+    </div>
+</div>
+
+<!-- Scripts -->
+<script>
+    const isPaidCheckbox = document.querySelector('input[name="is_paid"]');
+    const priceField = document.getElementById('priceField');
+    const attachmentInput = document.querySelector('input[type="file"]');
+    const preview = document.getElementById('filePreview');
+
+    function togglePriceField() {
+        if (isPaidCheckbox.checked) {
+            priceField.style.display = 'block';
+        } else {
+            priceField.style.display = 'none';
+        }
+    }
+
+    if (isPaidCheckbox) {
+        togglePriceField();
+        isPaidCheckbox.addEventListener('change', togglePriceField);
+    }
+
+    if (attachmentInput) {
+        attachmentInput.addEventListener('change', function() {
+            preview.innerHTML = '';
+            const file = this.files[0];
+            if (file) {
+                const fileType = file.type;
+                if (fileType.startsWith('image/')) {
+                    const img = document.createElement('img');
+                    img.src = URL.createObjectURL(file);
+                    img.classList.add('img-thumbnail', 'mt-2');
+                    img.style.maxWidth = '200px';
+                    preview.appendChild(img);
+                } else {
+                    const p = document.createElement('p');
+                    p.textContent = `Selected file: ${file.name}`;
+                    preview.appendChild(p);
+                }
+            }
+        });
+    }
+</script>
+{% endblock %}

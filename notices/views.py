@@ -1,27 +1,22 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
-
+from django.db import models
 from django.contrib import messages
 from django.contrib.auth.models import User
 from .models import Notice
 from .forms import NoticeForm
+from notifications.utils import notify_all_users
 from django.utils import timezone
 from theUsers.models import Profile
-from django.core.mail import send_mass_mail
-
-#PUBLICCNOTICE PAGE
-def public_notices(request):
-    notices = Notice.objects.filter(approved=True).order_by('-created_at')
-    return render(request, 'notices/public_notices.html', {'notices': notices})
 
 #LOGGED-IN NOTICE LIST
 @login_required
 def notice_list(request):
-    today = timezone.localdate()
     notices = Notice.objects.filter(
         approved=True,
-        is_active=True).filter(models.Q(expiry_date__isnull=True) | models.Q(expiry_date__gte=today).order_by('-created_at'))
+        expiry_date__gt=timezone.now()).order_by('-created_at')
+    
     return render(request, 'notices/notice_list.html', {'notices': notices})
 
 #CREATE NOTICE VIEW(FOR STAFF AND ADMIN)
@@ -40,9 +35,12 @@ def create_notice(request):
             notice.posted_by = request.user
             notice.save()
 
-            #students = Profile.objects.filter(role='student').values_list('user__id', flat=True)
-            #recipients = User.objects.filter(id__in=students, is_active=True)
+            notify_all_users(
+                subject="New Notice Posted",
+                message=f"A new notice has been posted: {notice.title}"
+        )
 
+            
             messages.success(request, "Notice submitted for approval.")
             return redirect('notice_list')
     else:
@@ -50,34 +48,16 @@ def create_notice(request):
 
     return render(request, 'notices/create_notice.html', {'form': form})
 
-@login_required
-def notice_list(request):
-    notices = Notice.objects.filter(
-        approved=True,
-        expiry_date__gt=timezone.now()
-        ).order_by('-created_at')
-    
-    return render(request, "notices/notice_list.html", {"notices": notices})
-
 def notice_detail(request, pk):
     notice = get_object_or_404(Notice, pk=pk, approved=True)
     return render(request, 'notices/notice_detail.html', {'notice': notice})
-
-
-#APPROVE NOTICE VIEW (FOR ADMIN)
-@login_required
-def approve_notice(request, pk):
-    notice = get_object_or_404(Notice, pk=pk)
-    notice.approved = True
-    notice.save()
-    return redirect("admin_notice_list")
 
 #ADMIN DASHBOARD TO MANAGE NOTICES
 @staff_member_required
 def admin_notice_dashboard(request):
     pending_notices = Notice.objects.filter(approved=False)
-    active_notices = Notice.objects.filter(approved=True, expiry_date__gt=timezone.now)
-    expired_notices = Notice.objects.filter(approved=True, expiry_date__lte=timezone.now)
+    active_notices = Notice.objects.filter(approved=True, expiry_date__gt=timezone.now())
+    expired_notices = Notice.objects.filter(approved=True, expiry_date__lte=timezone.now())
     approved_notices = Notice.objects.filter(approved=True)
     users =User.objects.count()
 
@@ -100,7 +80,7 @@ def approve_notice(request, pk):
     # Notification content
     title = f"New Notice: {notice.title}"
     message = f"{notice.content[:200]}..."  # short preview
-    url = f"/notices/{notice.pk}/"  # a detail view later
+    url = f"/notices/{notice.pk}/"  
 
     # Notifications for all active users (or filter by role/department)
     from notifications.models import Notification
@@ -150,4 +130,7 @@ def public_notices(request):
 @login_required
 def download_notice_file(request, pk):
     notice = get_object_or_404(Notice, pk=pk, approved=True)
+    if not notice.attachment:
+        messages.error(request, "No file attached.")
+        return redirect('notice_detail', pk=pk)
     return redirect(notice.attachment.url)

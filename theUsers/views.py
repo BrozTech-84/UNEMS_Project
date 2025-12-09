@@ -22,11 +22,17 @@ def register_view(request):
             user.set_password(user_form.cleaned_data['password1'])
             user.save()
 
-            profile, created = Profile.objects.get_or_create(user=user)
-            profile.role = profile_form.cleaned_data.get('role')    
+            assigned_role = user_form.cleaned_data.get('role')
+
+            profile = profile_form.save(commit=False)
+            profile.user = user
+            profile.role = assigned_role
+            profile.save()    
 
             messages.success(request, 'Registration successful. You can now log in.')
             return redirect('login')
+        else:
+            pass
         
     else:
         user_form = UserRegistrationForm()
