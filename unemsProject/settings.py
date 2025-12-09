@@ -30,8 +30,8 @@ MPESA_ENVIRONMENT = 'sandbox'
 
 # Credentials for the daraja app
 
-MPESA_CONSUMER_KEY = 'RQL5jgbycAfKQV0IWTYZYuj3kjywR8eypVM50GZXu1nnUZHk'
-MPESA_CONSUMER_SECRET = 'JIGbCxAj04LQAAlhqSctTnhGxdDYp4e41GKX5wf42fKCIiYY0oNCdS4RijGy3AS9'
+MPESA_CONSUMER_KEY = 'MPESA_CONSUMER_KEY'
+MPESA_CONSUMER_SECRET = 'MPESA_CONSUMER_SECRET'
 
 #Shortcode to use for transactions. For sandbox  use the Shortcode 1 provided on test credentials page
 
