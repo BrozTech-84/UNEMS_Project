@@ -48,6 +48,35 @@ def create_notice(request):
 
     return render(request, 'notices/create_notice.html', {'form': form})
 
+from django.contrib.admin.views.decorators import staff_member_required
+from django.shortcuts import get_object_or_404, redirect, render
+from .models import Notice
+from .forms import NoticeForm
+
+@staff_member_required
+def edit_notice(request, id):
+    notice = get_object_or_404(Notice, id=id)
+
+    if request.method == 'POST':
+        form = NoticeForm(request.POST, request.FILES, instance=notice)
+        if form.is_valid():
+            form.save()
+            return redirect('notice_detail', id=notice.id)
+    else:
+        form = NoticeForm(instance=notice)
+
+    return render(request, 'notices/edit_notice.html', {'form': form, 'notice': notice})
+
+
+@staff_member_required
+def delete_notice(request, id):
+    notice = get_object_or_404(Notice, id=id)
+    notice.delete()
+    return redirect('notice_list')
+
+
+
+
 def notice_detail(request, pk):
     notice = get_object_or_404(Notice, pk=pk, approved=True)
     return render(request, 'notices/notice_detail.html', {'notice': notice})

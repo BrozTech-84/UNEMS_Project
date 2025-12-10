@@ -1,85 +1,97 @@
 {% extends "base.html" %}
 {% load static %}
+{% load widget_tweaks %}
 
 {% block content %}
 <div class="container mt-5">
-    <div class="card shadow-lg border-0 rounded-4 p-4 p-md-5">
-        <h2 class="text-primary text-center mb-4">Create Notice</h2>
+  <div class="card shadow-lg border-0 rounded-4 p-4 p-md-5">
+    <h2 class="text-primary text-center mb-4">Create Notice</h2>
 
-        <!-- Messages -->
-        {% if messages %}
-            {% for message in messages %}
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    {{ message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            {% endfor %}
-        {% endif %}
+    <!-- Messages -->
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+      {% endfor %}
+    {% endif %}
 
-        <!-- Form -->
-        <form method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
+    <!-- Form -->
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
 
-            <!-- Title -->
-            <div class="mb-3">
-                {{ form.title.label_tag(attrs={"class": "form-label"}) }}
-                {{ form.title|add_class:"form-control" }}
-            </div>
+      <!-- Title -->
+      <div class="mb-3">
+        <label class="form-label" for="{{ form.title.id_for_label }}">
+          {{ form.title.label }}
+        </label>
+        {{ form.title|add_class:"form-control" }}
+      </div>
 
-            <!-- Content -->
-            <div class="mb-3">
-                {{ form.content.label_tag(attrs={"class": "form-label"}) }}
-                {{ form.content|add_class:"form-control" }}
-            </div>
+      <!-- Content -->
+      <div class="mb-3">
+        <label class="form-label" for="{{ form.content.id_for_label }}">
+          {{ form.content.label }}
+        </label>
+        {{ form.content|add_class:"form-control" }}
+      </div>
 
-            <!-- Audience -->
-            <div class="mb-3">
-                {{ form.audience.label_tag(attrs={"class": "form-label"}) }}
-                {{ form.audience|add_class:"form-select" }}
-            </div>
+      <!-- Audience -->
+      <div class="mb-3">
+        <label class="form-label" for="{{ form.audience.id_for_label }}">
+          {{ form.audience.label }}
+        </label>
+        {{ form.audience|add_class:"form-select" }}
+      </div>
 
-            <!-- Expiry Date -->
-            <div class="mb-3">
-                {{ form.expiry_date.label_tag(attrs={"class": "form-label"}) }}
-                {{ form.expiry_date|add_class:"form-control" }}
-            </div>
+      <!-- Expiry Date -->
+      <div class="mb-3">
+        <label class="form-label" for="{{ form.expiry_date.id_for_label }}">
+          {{ form.expiry_date.label }}
+        </label>
+        {{ form.expiry_date|add_class:"form-control" }}
+      </div>
 
-            <!-- File Upload -->
-            <div class="mb-4">
-                {{ form.attachment.label_tag(attrs={"class": "form-label"}) }}
-                {{ form.attachment|add_class:"form-control" }}
-                <div id="filePreview" class="mt-2"></div>
-            </div>
+      <!-- File Upload -->
+      <div class="mb-4">
+        <label class="form-label" for="{{ form.attachment.id_for_label }}">
+          {{ form.attachment.label }}
+        </label>
+        {{ form.attachment|add_class:"form-control" }}
+        <div id="filePreview" class="mt-2"></div>
+      </div>
 
-            <button type="submit" class="btn btn-primary w-100 py-2">Submit for Approval</button>
-        </form>
-    </div>
+      <button type="submit" class="btn btn-primary w-100 py-2">
+        Submit for Approval
+      </button>
+    </form>
+  </div>
 </div>
 
 <!-- File Preview Script -->
 <script>
-    const attachmentInput = document.querySelector('input[type="file"]');
-    const preview = document.getElementById('filePreview');
+  const attachmentInput = document.querySelector('input[type="file"]');
+  const preview = document.getElementById("filePreview");
 
-    if (attachmentInput) {
-        attachmentInput.addEventListener('change', function() {
-            preview.innerHTML = '';
-            const file = this.files[0];
-            if (file) {
-                const fileType = file.type;
-                if (fileType.startsWith('image/')) {
-                    const img = document.createElement('img');
-                    img.src = URL.createObjectURL(file);
-                    img.classList.add('img-thumbnail', 'mt-2');
-                    img.style.maxWidth = '200px';
-                    preview.appendChild(img);
-                } else {
-                    const p = document.createElement('p');
-                    p.textContent = `Selected file: ${file.name}`;
-                    preview.appendChild(p);
-                }
-            }
-        });
-    }
+  if (attachmentInput) {
+    attachmentInput.addEventListener("change", function () {
+      preview.innerHTML = "";
+      const file = this.files[0];
+      if (file) {
+        if (file.type.startsWith("image/")) {
+          const img = document.createElement("img");
+          img.src = URL.createObjectURL(file);
+          img.classList.add("img-thumbnail", "mt-2");
+          img.style.maxWidth = "200px";
+          preview.appendChild(img);
+        } else {
+          const p = document.createElement("p");
+          p.textContent = `Selected file: ${file.name}`;
+          preview.appendChild(p);
+        }
+      }
+    });
+  }
 </script>
 {% endblock %}

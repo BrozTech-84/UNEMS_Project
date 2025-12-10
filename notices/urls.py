@@ -6,7 +6,8 @@ urlpatterns = [
     path('create/', views.create_notice, name='create_notice'),
     path('<int:pk>/', views.notice_detail, name='notice_detail'),
     path('download/<int:pk>/', views.download_notice_file, name='download_notice'),
-
+    path('edit/<int:id>/', views.edit_notice, name='edit_notice'),
+    path('delete/<int:id>/', views.delete_notice, name='delete_notice'),
 
     # Admin Dashboard
     path('admin/dashboard/', views.admin_notice_dashboard, name='admin_notice_dashboard'),
