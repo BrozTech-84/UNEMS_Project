@@ -61,7 +61,7 @@ def edit_notice(request, id):
         form = NoticeForm(request.POST, request.FILES, instance=notice)
         if form.is_valid():
             form.save()
-            return redirect('notice_detail', id=notice.id)
+            return redirect('notice_detail', pk=notice.id)
     else:
         form = NoticeForm(instance=notice)
 
